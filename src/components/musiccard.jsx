@@ -8,7 +8,7 @@ function MusicCard({ title, url, onPlay, isPlaying }) {
   }, [isPlaying]);
 
   return (
-    <div className="flex justify-center items-center mt-20 z-[1]">
+    <div className="flex justify-center items-center my-8 z-[1]">
       <div className="bg-gray-200 w-6/12 flex gap-10 p-6">
         <button onClick={onPlay}>{isPlaying ? <FaPause /> : <FaPlay />}</button>
         <h1 className="grid">{title}</h1>

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 function Content({ songs, playSong, isPlaying, currentSongIndex }) {
   return (
     <>
-      <div className="max-h-[calc(100vh - 150px)] overflow-y-auto pb-32">
+      <div className="max-h-[calc(100vh - 150px)] overflow-y-auto pb-28">
         {songs.map((item, index) => (
           <div key={item.id}>
             <MusicCard
