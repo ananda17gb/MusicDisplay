@@ -1,8 +1,10 @@
-# React + Vite
+# My Music Display Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+My first website project related to my other hobby, making music. It is made using React through Vite and Firebase (Firestore Database and Firebase storage). You can access the website through this [link](https://anandamusicdisplay.vercel.app) or if you want to see the Vercel project page you can use [this](https://vercel.com/ananda-arti-widigdos-projects/anandamusicdisplay).
 
-Currently, two official plugins are available:
+## Screenshots
+![image](https://github.com/ananda17gb/MusicDisplay/assets/79387612/f4af4682-a980-4fa1-b08c-e845f5d90641)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+
+
