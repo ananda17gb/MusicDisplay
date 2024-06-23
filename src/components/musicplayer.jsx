@@ -125,7 +125,7 @@ function MusicPlayer({
                 onChange={handleProgressChange}
                 className="w-full"
               />
-              <span>{`${formatTime(currentTime)} / ${formatTime(
+              <span>{`${formatTime(currentTime)}/${formatTime(
                 duration
               )}`}</span>
             </div>
