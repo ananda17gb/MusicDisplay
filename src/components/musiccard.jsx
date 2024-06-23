@@ -1,17 +1,17 @@
-import { useEffect } from "react";
-import { FaPlay, FaPause } from "react-icons/fa";
 import PropTypes from "prop-types";
+import { useEffect } from "react";
+import { FaPause, FaPlay } from "react-icons/fa";
 
-function MusicCard({ title, url, onPlay, isPlaying }) {
-  useEffect(() => {
-    // This effect runs when the playing state of the song changes
-  }, [isPlaying]);
+function MusicCard({ title, onPlay, isPlaying }) {
+  useEffect(() => {}, [isPlaying]);
 
   return (
-    <div className="flex justify-center items-center my-8 z-[1]">
-      <div className="bg-gray-200 w-6/12 flex gap-10 p-6">
+    <div className="flex justify-center items-center my-20">
+      <div className="bg-gray-400 w-6/12 flex gap-10 p-6">
         <button onClick={onPlay}>{isPlaying ? <FaPause /> : <FaPlay />}</button>
-        <h1 className="grid">{title}</h1>
+        <h1 className="overflow-hidden whitespace-nowrap overflow-ellipsis max-w-full">
+          {title}
+        </h1>
       </div>
     </div>
   );
@@ -19,7 +19,6 @@ function MusicCard({ title, url, onPlay, isPlaying }) {
 
 MusicCard.propTypes = {
   title: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
   onPlay: PropTypes.func.isRequired,
   isPlaying: PropTypes.bool.isRequired,
 };

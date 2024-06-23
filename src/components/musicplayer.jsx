@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import { useEffect, useRef, useState } from "react";
 import {
-  FaPlay,
-  FaPause,
   FaBackwardStep,
   FaForwardStep,
+  FaPause,
+  FaPlay,
+  FaVolumeHigh,
 } from "react-icons/fa6";
-import PropTypes from "prop-types";
 
 function formatTime(seconds) {
   const hrs = Math.floor(seconds / 3600);
@@ -30,7 +31,8 @@ function MusicPlayer({
   const audioRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1); // Initial volume level (1 is max)
+  const [volume, setVolume] = useState(1);
+  const [showVolume, setShowVolume] = useState(false);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -82,16 +84,20 @@ function MusicPlayer({
     setVolume(parseFloat(e.target.value));
   };
 
+  const toggleVolume = () => {
+    setShowVolume(!showVolume);
+  };
+
   return (
     <div className="flex justify-center items-center fixed bottom-0 w-full z-10">
       <div className="fixed bottom-0 w-full">
-        <div className="bg-gray-100 grid grid-cols-6 gap-2 p-4 items-center">
+        <div className="bg-gray-100 grid grid-cols-6 grid-rows-3 gap-2 p-4 items-center">
           <div className="flex justify-evenly gap-10 col-span-6">
             {currentSongIndex !== null && (
               <h1 className="text-xl">{songs[currentSongIndex].title}</h1>
             )}
           </div>
-          <div className="flex justify-evenly col-span-3 gap-4 row">
+          <div className="flex justify-evenly col-start-2 col-span-4 gap-4">
             <button
               onClick={prevSong}
               className="flex justify-center items-center"
@@ -111,7 +117,7 @@ function MusicPlayer({
               <FaForwardStep />
             </button>
           </div>
-          <div className="gap-2 col-span-2">
+          <div className="gap-2 col-span-4 col-start-2 row-start-3">
             <div className="flex justify-center items-center gap-4">
               <input
                 type="range"
@@ -124,7 +130,30 @@ function MusicPlayer({
               )}`}</span>
             </div>
           </div>
-          <div className="col-span-1">
+          <button
+            className="hidden md:block lg:hidden row-start-3 col-start-6"
+            onClick={toggleVolume}
+          >
+            <div className="flex justify-center">
+              <FaVolumeHigh />
+            </div>
+          </button>
+          {showVolume && (
+            <div className="hidden md:block col-start-6 row-start-2">
+              <div className="flex gap-2 justify-center">
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  className="w-32"
+                />
+              </div>
+            </div>
+          )}
+          <div className="hidden md:hidden lg:block xl:block col-start-6 row-start-2">
             <div className="flex gap-2 justify-center">
               <input
                 type="range"
@@ -133,7 +162,7 @@ function MusicPlayer({
                 step="0.01"
                 value={volume}
                 onChange={handleVolumeChange}
-                // className="absolute top-[40%] rotate-[270deg]"
+                className="w-32"
               />
             </div>
           </div>

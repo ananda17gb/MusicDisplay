@@ -1,40 +1,28 @@
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { useEffect } from "react";
-import { db } from "../../firebaseConfig"; // Import the Firestore instance from your Firebase configuration file
-import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db, storage } from "../../firebaseConfig"; // Import the Firestore instance from your Firebase configuration file
 
 function FetchSongsAndAddToFirestore() {
   useEffect(() => {
     const fetchSongsAndAddToFirestore = async () => {
       try {
-        // Get reference to the songs directory in Firebase Storage
-        const storage = getStorage();
         const songsRef = ref(storage, "anandamusic");
-
-        // List all items (songs) in the songs directory
         const songItems = await listAll(songsRef);
-
-        // Get existing songs from Firestore
         const songsSnapshot = await getDocs(collection(db, "songs"));
         const existingSongs = songsSnapshot.docs.map((doc) =>
           doc.data().title.toLowerCase().trim()
         );
 
-        // Iterate through each song item
         for (const item of songItems.items) {
-          // Get the download URL of the song
           const downloadURL = await getDownloadURL(item);
 
-          // Extract the title from the file name
           const fileName = item.name;
           const title = fileName
             .substring(0, fileName.lastIndexOf("."))
             .toLowerCase()
-            .trim(); // Assuming file extension is present
-
-          // Check if the song already exists in Firestore
+            .trim();
           if (!existingSongs.includes(title)) {
-            // Add the title and URL to Firestore
             await addDoc(collection(db, "songs"), {
               title: title,
               url: downloadURL,
@@ -49,9 +37,8 @@ function FetchSongsAndAddToFirestore() {
     };
 
     fetchSongsAndAddToFirestore();
-  }, []); // Run once on component mount
-
-  return <></>; // Empty component since this is just a side effect
+  }, []);
+  return <></>;
 }
 
 export default FetchSongsAndAddToFirestore;
