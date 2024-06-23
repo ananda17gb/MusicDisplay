@@ -59,6 +59,18 @@ function MusicPlayer({
     }
   }, [isPlaying]);
 
+  useEffect(() => {
+    const handleEnded = () => {
+      nextSong();
+    };
+    if (audioRef.current) {
+      audioRef.current.addEventListener("ended", handleEnded);
+      return () => {
+        audioRef.current.removeEventListener("ended", handleEnded);
+      };
+    }
+  }, [currentSongIndex, nextSong]);
+
   const playPause = () => {
     if (audioRef.current.paused) {
       audioRef.current.play();
