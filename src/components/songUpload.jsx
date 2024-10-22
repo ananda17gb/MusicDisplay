@@ -1,7 +1,7 @@
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { useEffect } from "react";
-import { db, storage } from "../../firebaseConfig"; // Import the Firestore instance from your Firebase configuration file
+import { db, storage } from "../../firebaseConfig";
 
 function FetchSongsAndAddToFirestore() {
   useEffect(() => {
@@ -16,23 +16,26 @@ function FetchSongsAndAddToFirestore() {
 
         for (const item of songItems.items) {
           const downloadURL = await getDownloadURL(item);
-
           const fileName = item.name;
           const title = fileName
             .substring(0, fileName.lastIndexOf("."))
             .toLowerCase()
             .trim();
           if (!existingSongs.includes(title)) {
+            const imageRef = ref(storage, `anandamusic/images/${title}.gif`);
+            const imageURL = await getDownloadURL(imageRef).catch(
+              () => "/subway.png"
+            );
             await addDoc(collection(db, "songs"), {
               title: title,
               url: downloadURL,
+              image: imageURL,
             });
           }
+          console.log(title);
         }
-
-        console.log("Songs fetched and added to Firestore successfully!");
       } catch (error) {
-        console.error("Error fetching songs and adding to Firestore:", error);
+        console.error(error);
       }
     };
 

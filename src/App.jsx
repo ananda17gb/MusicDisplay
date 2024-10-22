@@ -1,11 +1,8 @@
-import Header from "./components/header";
-import Content from "./components/content";
-import MusicPlayer from "./components/musicplayer";
 import SongUpload from "./components/songUpload";
+import MusicPlayerCard from "./components/musicPlayerCard";
 import { useState, useEffect } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-// import { storage } from "../firebaseConfig";
 
 function App() {
   const [songs, setSongs] = useState([]);
@@ -21,52 +18,68 @@ function App() {
           ...doc.data(),
         }));
         setSongs(songsList);
+
+        if (songsList.length > 0) {
+          setCurrentSongIndex(0);
+          setIsPlaying(false); // Start playing the first song immediately
+        }
       } catch (error) {
-        console.error("Error fetching songs: ", error);
+        console.error(error);
       }
     };
     fetchData();
   }, []);
 
-  const playSong = (index) => {
-    if (currentSongIndex === index) {
-      setIsPlaying(!isPlaying); // Toggle play/pause if the same song is clicked again
-    } else {
-      setCurrentSongIndex(index);
-      setIsPlaying(true); // Play the selected song
-    }
-  };
+  // const playSong = (index) => {
+  //   if (currentSongIndex === index) {
+  //     setIsPlaying(!isPlaying);
+  //   } else {
+  //     setCurrentSongIndex(index);
+  //     setIsPlaying(true);
+  //   }
+  // };
 
   const nextSong = () => {
     setCurrentSongIndex((prevIndex) => (prevIndex + 1) % songs.length);
-    setIsPlaying(true); // Play the next song
+    setIsPlaying(true);
   };
 
   const prevSong = () => {
     setCurrentSongIndex(
       (prevIndex) => (prevIndex - 1 + songs.length) % songs.length
     );
-    setIsPlaying(true); // Play the previous song
+    setIsPlaying(true);
   };
 
   return (
     <>
-      <Header />
-      <SongUpload /> {/* Render the upload form component */}
-      <Content
+      <SongUpload />
+      <div
+        style={{
+          backgroundImage: `url("${songs[currentSongIndex]?.image || ""}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="relative bg-[#000000] bg-opacity-80 backdrop-blur-xl">
+          <MusicPlayerCard
+            currentSongIndex={currentSongIndex}
+            isPlaying={isPlaying}
+            songs={songs}
+            nextSong={nextSong}
+            prevSong={prevSong}
+            setIsPlaying={setIsPlaying}
+          />
+        </div>
+      </div>
+
+      {/* <Content
         songs={songs}
         playSong={playSong}
         isPlaying={isPlaying}
         currentSongIndex={currentSongIndex}
       />
-      <MusicPlayer
-        currentSongIndex={currentSongIndex}
-        isPlaying={isPlaying}
-        songs={songs}
-        nextSong={nextSong}
-        prevSong={prevSong}
-        setIsPlaying={setIsPlaying}
-      />
+       */}
     </>
   );
 }
